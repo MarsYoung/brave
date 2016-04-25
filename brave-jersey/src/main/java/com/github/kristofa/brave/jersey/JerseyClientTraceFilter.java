@@ -29,6 +29,8 @@ public class JerseyClientTraceFilter extends ClientFilter {
     private final ClientResponseInterceptor clientResponseInterceptor;
     private final SpanNameProvider spanNameProvider;
 
+
+
     @Inject
     public JerseyClientTraceFilter(SpanNameProvider spanNameProvider, ClientRequestInterceptor requestInterceptor, ClientResponseInterceptor responseInterceptor) {
         this.spanNameProvider = spanNameProvider;

@@ -22,13 +22,12 @@ public class RpcClientRequestAdapter implements ClientRequestAdapter {
     private final Invoker invoker;
     private final RpcInvocation invocation;
     private final RpcSpanNameProvider rpcSpanNameProvider;
-    private final RpcServiceNameProvider rpcServiceNameProvider;
 
 
-    public RpcClientRequestAdapter(Invoker invoker, RpcInvocation invocation,  RpcServiceNameProvider rpcServiceNameProvider,RpcSpanNameProvider rpcSpanNameProvider) {
+
+    public RpcClientRequestAdapter(Invoker invoker, RpcInvocation invocation,  RpcSpanNameProvider rpcSpanNameProvider) {
         this.invoker = invoker;
         this.invocation = invocation;
-        this.rpcServiceNameProvider = rpcServiceNameProvider;
         this.rpcSpanNameProvider = rpcSpanNameProvider;
     }
 
@@ -49,11 +48,6 @@ public class RpcClientRequestAdapter implements ClientRequestAdapter {
                 invocation.setAttachment(DubboAttachments.ParentSpanId.getName(), IdConversion.convertToString(spanId.getParentSpanId()));
             }
         }
-    }
-
-    @Override
-    public String getClientServiceName() {
-        return rpcServiceNameProvider.serviceName(invocation);
     }
 
     @Override

@@ -1,1 +1,2 @@
-braveDubboFilter=com.marsyoung.brave.filter.BraveDubboFilter
+braveDubboClientFilter=com.marsyoung.brave.filter.BraveDubboClientFilter
+braveDubboServerFilter=com.marsyoung.brave.filter.BraveDubboServerFilter
