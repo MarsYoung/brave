@@ -6,7 +6,6 @@ import com.github.kristofa.brave.ClientRequestAdapter;
 import com.github.kristofa.brave.IdConversion;
 import com.github.kristofa.brave.KeyValueAnnotation;
 import com.github.kristofa.brave.SpanId;
-import com.github.kristofa.brave.http.BraveHttpHeaders;
 import com.github.kristofa.brave.internal.Nullable;
 import com.marsyoung.brave.constants.DubboAttachments;
 

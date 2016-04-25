@@ -16,14 +16,13 @@ import com.marsyoung.brave.dubbo.*;
 @Activate(group = Constants.CONSUMER)
 public class BraveDubboClientFilter implements Filter {
 
-    private final RpcServiceNameProvider rpcServiceNameProvider;
+    //private final RpcServiceNameProvider rpcServiceNameProvider;
     private final RpcSpanNameProvider rpcSpanNameProvider;
 
     private final ClientRequestInterceptor requestInterceptor;
     private final ClientResponseInterceptor responseInterceptor;
 
-    public BraveDubboClientFilter(RpcServiceNameProvider rpcServiceNameProvider, RpcSpanNameProvider rpcSpanNameProvider, ClientRequestInterceptor requestInterceptor, ClientResponseInterceptor responseInterceptor) {
-        this.rpcServiceNameProvider = rpcServiceNameProvider;
+    public BraveDubboClientFilter( RpcSpanNameProvider rpcSpanNameProvider, ClientRequestInterceptor requestInterceptor, ClientResponseInterceptor responseInterceptor) {
         this.rpcSpanNameProvider = rpcSpanNameProvider;
         this.requestInterceptor = requestInterceptor;
         this.responseInterceptor = responseInterceptor;
@@ -33,7 +32,7 @@ public class BraveDubboClientFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         //handle
-        requestInterceptor.handle(new RpcClientRequestAdapter(invoker,(RpcInvocation) invocation,rpcServiceNameProvider,rpcSpanNameProvider));
+        requestInterceptor.handle(new RpcClientRequestAdapter(invoker,(RpcInvocation) invocation,rpcSpanNameProvider));
         Result result= invoker.invoke(invocation);
         responseInterceptor.handle(new RpcClientResponseAdapter(invoker,(RpcInvocation)invocation,result));
         return result;
