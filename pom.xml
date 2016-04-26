@@ -66,7 +66,8 @@
     <module>brave-spring-resttemplate-interceptors</module>
     <module>brave-mysql</module>
     <module>brave-web-servlet-filter</module>
-      <module>brave-dubbo</module>
+    <module>brave-dubbo</module>
+    <module>brave-dubbo-test</module>
   </modules>
 
   <distributionManagement>

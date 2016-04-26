@@ -9,13 +9,10 @@
 
     <groupId>com.marsyoung</groupId>
     <artifactId>brave-dubbo</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>brave-dubbo</name>
     <url>http://maven.apache.org</url>
-    <modules>
-        <module>../brave-dubbo-test</module>
-    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,6 +45,22 @@
             <artifactId>brave-spancollector-scribe</artifactId>
             <version>3.5.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.sgroschupf</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
     </dependencies>
 
 

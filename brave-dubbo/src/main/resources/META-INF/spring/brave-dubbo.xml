@@ -7,4 +7,7 @@
 	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
     <dubbo:annotation package="com.marsyoung.brave" />
     <context:component-scan base-package="com.marsyoung.brave"></context:component-scan>
+    <context:property-placeholder
+            ignore-resource-not-found="false"
+            location="classpath*:brave-dubbo.properties,classpath*:log4j.properties" />
 </beans>
