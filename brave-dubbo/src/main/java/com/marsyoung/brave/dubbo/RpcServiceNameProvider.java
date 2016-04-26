@@ -8,6 +8,6 @@ import com.alibaba.dubbo.rpc.Invocation;
  */
 public interface RpcServiceNameProvider {
 
-    String serviceName(Invocation invocation);
+    String serviceName();
 
 }

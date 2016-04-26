@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"/META-INF/spring/brave-dubbo-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/META-INF/spring/brave-dubbo-test.xml"})
 public class BaseTest {
     public Log log = LogFactory.getLog(BaseTest.class);
 }

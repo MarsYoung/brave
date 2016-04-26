@@ -2,10 +2,14 @@ package com.marsyoung.brave.filter;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
+import com.alibaba.dubbo.config.spring.ServiceBean;
 import com.alibaba.dubbo.rpc.*;
+import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ServerRequestInterceptor;
 import com.github.kristofa.brave.ServerResponseInterceptor;
 import com.marsyoung.brave.dubbo.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 
 /**
@@ -16,22 +20,22 @@ import com.marsyoung.brave.dubbo.*;
 @Activate(group = Constants.PROVIDER)
 public class BraveDubboServerFilter implements Filter {
 
-    private final RpcServiceNameProvider rpcServiceNameProvider;
-    private final RpcSpanNameProvider rpcSpanNameProvider;
+    private RpcServiceNameProvider rpcServiceNameProvider;
+    private RpcSpanNameProvider rpcSpanNameProvider;
 
-    private final ServerRequestInterceptor requestInterceptor;
-    private final ServerResponseInterceptor responseInterceptor;
+    private ServerRequestInterceptor requestInterceptor;
+    private ServerResponseInterceptor responseInterceptor;
 
-    public BraveDubboServerFilter(RpcServiceNameProvider rpcServiceNameProvider, RpcSpanNameProvider rpcSpanNameProvider, ServerRequestInterceptor requestInterceptor, ServerResponseInterceptor responseInterceptor) {
-        this.rpcServiceNameProvider = rpcServiceNameProvider;
-        this.rpcSpanNameProvider = rpcSpanNameProvider;
-        this.requestInterceptor = requestInterceptor;
-        this.responseInterceptor = responseInterceptor;
-    }
 
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        ApplicationContext context=ServiceBean.getSpringContext();
+        rpcServiceNameProvider = context.getBean(RpcServiceNameProvider.class);
+        rpcSpanNameProvider = context.getBean(RpcSpanNameProvider.class);
+
+        requestInterceptor = context.getBean(Brave.class).serverRequestInterceptor();
+        responseInterceptor = context.getBean(Brave.class).serverResponseInterceptor();
         //handle
         requestInterceptor.handle(new RpcServerRequestAdapter(invoker,(RpcInvocation) invocation,rpcServiceNameProvider,rpcSpanNameProvider));
         Result result= invoker.invoke(invocation);

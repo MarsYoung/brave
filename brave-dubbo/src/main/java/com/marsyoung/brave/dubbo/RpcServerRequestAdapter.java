@@ -25,7 +25,6 @@ public class RpcServerRequestAdapter implements ServerRequestAdapter {
         this.rpcSpanNameProvider = rpcSpanNameProvider;
     }
 
-
     @Override
     public TraceData getTraceData() {
         final String sampled = invocation.getAttachment(DubboAttachments.Sampled.getName());
@@ -48,7 +47,7 @@ public class RpcServerRequestAdapter implements ServerRequestAdapter {
 
     @Override
     public String getSpanName() {
-        return rpcSpanNameProvider.spanName(invocation);
+        return rpcSpanNameProvider.spanName(invoker,invocation);
     }
 
     @Override

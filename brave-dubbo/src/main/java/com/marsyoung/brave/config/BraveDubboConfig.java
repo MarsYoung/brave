@@ -2,6 +2,10 @@ package com.marsyoung.brave.config;
 
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.scribe.ScribeSpanCollector;
+import com.marsyoung.brave.dubbo.DefaultRpcServiceNameProvider;
+import com.marsyoung.brave.dubbo.DefaultRpcSpanNameProvider;
+import com.marsyoung.brave.dubbo.RpcServiceNameProvider;
+import com.marsyoung.brave.dubbo.RpcSpanNameProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +21,9 @@ public class BraveDubboConfig {
 
     @Value("${dubbo.application.name}")
     String serverName;
-    @Value("10.16.12.137")//zipkin.scribecollector.ip
+    @Value("${zipkin.scribecollector.ip}")//zipkin.scribecollector.ip
     String scribecollectorIp;//10.16.12.137
-    @Value("9410")//"zipkin.scribecollector.port"
+    @Value("${zipkin.scribecollector.port}")//"zipkin.scribecollector.port"
     Integer scribecollectorPort;//9410
 
     @Bean
@@ -27,5 +31,16 @@ public class BraveDubboConfig {
     public Brave brave() {
         Brave.Builder builder = new Brave.Builder(serverName);
         return builder.spanCollector(new ScribeSpanCollector(scribecollectorIp, scribecollectorPort)).build();
+    }
+    @Bean
+    @Scope(value = "singleton")
+    public RpcSpanNameProvider rpcSpanNameProvider(){
+        return new DefaultRpcSpanNameProvider();
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public RpcServiceNameProvider rpcServiceServiceNameProvider(){
+        return new DefaultRpcServiceNameProvider(serverName);
     }
 }

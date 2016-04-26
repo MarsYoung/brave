@@ -2,10 +2,13 @@ package com.marsyoung.brave.filter;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
+import com.alibaba.dubbo.config.spring.ServiceBean;
 import com.alibaba.dubbo.rpc.*;
+import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ClientRequestInterceptor;
 import com.github.kristofa.brave.ClientResponseInterceptor;
 import com.marsyoung.brave.dubbo.*;
+import org.springframework.context.ApplicationContext;
 
 
 /**
@@ -16,21 +19,22 @@ import com.marsyoung.brave.dubbo.*;
 @Activate(group = Constants.CONSUMER)
 public class BraveDubboClientFilter implements Filter {
 
-    //private final RpcServiceNameProvider rpcServiceNameProvider;
-    private final RpcSpanNameProvider rpcSpanNameProvider;
+    private  RpcSpanNameProvider rpcSpanNameProvider;
 
-    private final ClientRequestInterceptor requestInterceptor;
-    private final ClientResponseInterceptor responseInterceptor;
+    private  ClientRequestInterceptor requestInterceptor;
+    private  ClientResponseInterceptor responseInterceptor;
 
-    public BraveDubboClientFilter( RpcSpanNameProvider rpcSpanNameProvider, ClientRequestInterceptor requestInterceptor, ClientResponseInterceptor responseInterceptor) {
-        this.rpcSpanNameProvider = rpcSpanNameProvider;
-        this.requestInterceptor = requestInterceptor;
-        this.responseInterceptor = responseInterceptor;
-    }
+
 
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        ApplicationContext context= ServiceBean.getSpringContext();
+        rpcSpanNameProvider = context.getBean(RpcSpanNameProvider.class);
+
+        requestInterceptor = context.getBean(Brave.class).clientRequestInterceptor();
+        responseInterceptor = context.getBean(Brave.class).clientResponseInterceptor();
+
         //handle
         requestInterceptor.handle(new RpcClientRequestAdapter(invoker,(RpcInvocation) invocation,rpcSpanNameProvider));
         Result result= invoker.invoke(invocation);

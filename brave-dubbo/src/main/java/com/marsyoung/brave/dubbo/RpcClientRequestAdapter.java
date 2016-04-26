@@ -32,7 +32,7 @@ public class RpcClientRequestAdapter implements ClientRequestAdapter {
 
     @Override
     public String getSpanName() {
-        return rpcSpanNameProvider.spanName(invocation);
+        return rpcSpanNameProvider.spanName(invoker,invocation);
     }
 
     @Override
