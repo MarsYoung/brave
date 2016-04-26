@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+    http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+    ">
+
+    <dubbo:application name="${dubbo.application.name}" owner="${dubbo.application.owner}"
+        organization="${dubbo.application.owner}" />
+
+    <dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" file="${dubbo.registry.file}"
+        group="${dubbo.registry.group}" />
+
+    <dubbo:annotation package="com.marsyoung" />
+
+    <dubbo:consumer check="false" retries="0"/>
+	
+	<dubbo:provider threads="600" threadpool="fixed" retries="0" loadbalance="roundrobin" accesslog="true"/>
+
+	<dubbo:protocol name="dubbo" port="${dubbo.protocol.dubbo.port}"/>
+	
+	<dubbo:monitor address="${dubbo.monitor.address}" />
+    <context:property-placeholder
+        ignore-resource-not-found="false"
+        location="classpath*:dubbo.properties" />
+    <context:component-scan base-package="com.marsyoung.*">
+   	</context:component-scan>
+</beans>
