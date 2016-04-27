@@ -5,5 +5,6 @@ package com.marsyoung.service;
  */
 public interface BraveTest {
 
-    String testBrave(String name);
+    String testBrave1(String name);
+
 }

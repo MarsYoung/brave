@@ -22,11 +22,15 @@ public class ServerRequestInterceptorTest {
     private ServerRequestInterceptor interceptor;
     private ServerTracer serverTracer;
     private ServerRequestAdapter adapter;
+    private ClientTracer clientTracer;
+    private ServerCreateSpanSwitch serverCreateSpanSwitch;
 
     @Before
     public void setup() {
         serverTracer = mock(ServerTracer.class);
-        interceptor = new ServerRequestInterceptor(serverTracer);
+        clientTracer = mock(ClientTracer.class);
+        serverCreateSpanSwitch =mock(ServerCreateSpanSwitch.class);
+        interceptor = new ServerRequestInterceptor(serverTracer, clientTracer, serverCreateSpanSwitch);
         adapter = mock(ServerRequestAdapter.class);
     }
 

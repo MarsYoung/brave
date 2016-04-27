@@ -22,8 +22,11 @@
 	<dubbo:provider threads="600" threadpool="fixed" retries="0" loadbalance="roundrobin" accesslog="true"/>
 
 	<dubbo:protocol name="dubbo" port="${dubbo.protocol.dubbo.port}"/>
-	
-	<dubbo:monitor address="${dubbo.monitor.address}" />
+
+    <dubbo:protocol name="rest" port="${dubbo.protocol.rest.port}"
+                    keepalive="true" server="netty" iothreads="17" threads="300" />
+
+	<!--<dubbo:monitor address="${dubbo.monitor.address}" />-->
     <context:property-placeholder
         ignore-resource-not-found="false"
         location="classpath*:dubbo.properties,classpath*:log4j.properties,classpath*:brave-dubbo.properties" />

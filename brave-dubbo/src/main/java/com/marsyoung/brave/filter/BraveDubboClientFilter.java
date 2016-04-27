@@ -30,6 +30,9 @@ public class BraveDubboClientFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         ApplicationContext context= ServiceBean.getSpringContext();
+        if(context==null){
+
+        }
         rpcSpanNameProvider = context.getBean(RpcSpanNameProvider.class);
 
         requestInterceptor = context.getBean(Brave.class).clientRequestInterceptor();

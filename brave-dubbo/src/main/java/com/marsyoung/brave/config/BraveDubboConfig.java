@@ -1,11 +1,10 @@
 package com.marsyoung.brave.config;
 
 import com.github.kristofa.brave.Brave;
+import com.github.kristofa.brave.Sampler;
+import com.github.kristofa.brave.ServerCreateSpanSwitch;
 import com.github.kristofa.brave.scribe.ScribeSpanCollector;
-import com.marsyoung.brave.dubbo.DefaultRpcServiceNameProvider;
-import com.marsyoung.brave.dubbo.DefaultRpcSpanNameProvider;
-import com.marsyoung.brave.dubbo.RpcServiceNameProvider;
-import com.marsyoung.brave.dubbo.RpcSpanNameProvider;
+import com.marsyoung.brave.dubbo.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,8 +28,9 @@ public class BraveDubboConfig {
     @Bean
     @Scope(value = "singleton")
     public Brave brave() {
-        Brave.Builder builder = new Brave.Builder(serverName);
-        return builder.spanCollector(new ScribeSpanCollector(scribecollectorIp, scribecollectorPort)).build();
+        Brave.Builder builder = new Brave.Builder(serverName,new DefaultRpcServerCreateSpanSwitch(),0);
+        return builder.spanCollector(new ScribeSpanCollector(scribecollectorIp, scribecollectorPort)).traceSampler(Sampler.create(1.0f))
+                .build();
     }
     @Bean
     @Scope(value = "singleton")
@@ -42,5 +42,11 @@ public class BraveDubboConfig {
     @Scope(value = "singleton")
     public RpcServiceNameProvider rpcServiceServiceNameProvider(){
         return new DefaultRpcServiceNameProvider(serverName);
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public ServerCreateSpanSwitch serverCreateSpanSwitch(){
+        return new DefaultRpcServerCreateSpanSwitch();
     }
 }

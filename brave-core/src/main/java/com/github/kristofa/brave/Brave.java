@@ -21,6 +21,7 @@ public class Brave {
     private final ServerSpanThreadBinder serverSpanThreadBinder;
     private final ClientSpanThreadBinder clientSpanThreadBinder;
 
+
     /**
      * Builds Brave api objects with following defaults if not overridden:
      * <p>
@@ -37,6 +38,8 @@ public class Brave {
         private Random random = new Random();
         // default added so callers don't need to check null.
         private Sampler sampler = Sampler.create(1.0f);
+
+        private final ServerCreateSpanSwitch serverCreateSpanSwitch;
 
         /**
          * Builder which initializes with serviceName = "unknown".
@@ -64,6 +67,16 @@ public class Brave {
             try {
                 int ip = toInt(getLocalHostLANAddress());
                 state = new ThreadLocalServerClientAndLocalSpanState(ip, 0, serviceName);
+                serverCreateSpanSwitch= new DefaultServerCreateSpanSwitch();
+            } catch (UnknownHostException e) {
+                throw new IllegalStateException("Unable to get Inet address", e);
+            }
+        }
+        public Builder(String serviceName, ServerCreateSpanSwitch ServerCreateSpanSwitch,int port) {
+            try {
+                int ip = toInt(getLocalHostLANAddress());
+                state = new ThreadLocalServerClientAndLocalSpanState(ip, port, serviceName);
+                this.serverCreateSpanSwitch= ServerCreateSpanSwitch;
             } catch (UnknownHostException e) {
                 throw new IllegalStateException("Unable to get Inet address", e);
             }
@@ -78,6 +91,7 @@ public class Brave {
          */
         public Builder(int ip, int port, String serviceName) {
             state = new ThreadLocalServerClientAndLocalSpanState(ip, port, serviceName);
+            serverCreateSpanSwitch= new DefaultServerCreateSpanSwitch();
         }
 
         /**
@@ -85,7 +99,10 @@ public class Brave {
          */
         public Builder(ServerClientAndLocalSpanState state) {
             this.state = Util.checkNotNull(state, "state must be specified.");
+            serverCreateSpanSwitch= new DefaultServerCreateSpanSwitch();
         }
+
+
 
         /**
          * @deprecated use {@link #traceSampler(Sampler)} as filters here will be ignored.
@@ -212,8 +229,8 @@ public class Brave {
                 .spanCollector(builder.spanCollector)
                 .spanAndEndpoint(SpanAndEndpoint.LocalSpanAndEndpoint.create(builder.state))
                 .traceSampler(builder.sampler).build();
-        
-        serverRequestInterceptor = new ServerRequestInterceptor(serverTracer);
+
+        serverRequestInterceptor = new ServerRequestInterceptor(serverTracer, clientTracer, builder.serverCreateSpanSwitch);
         serverResponseInterceptor = new ServerResponseInterceptor(serverTracer);
         clientRequestInterceptor = new ClientRequestInterceptor(clientTracer);
         clientResponseInterceptor = new ClientResponseInterceptor(clientTracer);

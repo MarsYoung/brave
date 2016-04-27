@@ -19,7 +19,13 @@ public class ServerRequestInterceptor {
 
     private final ServerTracer serverTracer;
 
-    public ServerRequestInterceptor(ServerTracer serverTracer) {
+    private final ClientTracer clientTracer;//if client not exit ,use it create a span in server
+
+    private final ServerCreateSpanSwitch serverCreateSpanSwitch;//use to controller if add create span in server received
+
+    public ServerRequestInterceptor(ServerTracer serverTracer, ClientTracer clientTracer, ServerCreateSpanSwitch serverCreateSpanSwitch) {
+        this.clientTracer = clientTracer;
+        this.serverCreateSpanSwitch = serverCreateSpanSwitch;
         this.serverTracer = checkNotNull(serverTracer, "Null serverTracer");
     }
 
@@ -31,11 +37,24 @@ public class ServerRequestInterceptor {
     public void handle(ServerRequestAdapter adapter) {
         serverTracer.clearCurrentSpan();
         final TraceData traceData = adapter.getTraceData();
-
         Boolean sample = traceData.getSample();
         if (sample != null && Boolean.FALSE.equals(sample)) {
-            serverTracer.setStateNoTracing();
-            LOGGER.fine("Received indication that we should NOT trace.");
+            if(serverCreateSpanSwitch.ifTurnOn()){
+                //edit by marsyoung ,if no client to genreate span ,create a span when server received
+                //in our situation ,when there is no trace data ,means no brave client exist
+                SpanId spanId = clientTracer.startNewSpan(adapter.getSpanName());
+                serverTracer.setStateCurrentTrace(spanId.getTraceId(), spanId.getSpanId(),
+                        spanId.getParentSpanId(), adapter.getSpanName());
+                serverTracer.setServerReceived();
+                for(KeyValueAnnotation annotation : adapter.requestAnnotations())
+                {
+                    serverTracer.submitBinaryAnnotation(annotation.getKey(), annotation.getValue());
+                }
+            }else{
+                serverTracer.setStateNoTracing();
+                LOGGER.fine("Received indication that we should NOT trace.");
+            }
+
         } else {
             if (traceData.getSpanId() != null) {
                 LOGGER.fine("Received span information as part of request.");

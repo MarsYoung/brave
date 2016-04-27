@@ -12,9 +12,16 @@ public class Test1 extends BaseTest {
 	@Test
 	public void test(){
 		int i=0;
-		while(i++<10) {
-			braveTest.testBrave("test");
+//		while(i++<100) {
+			braveTest.testBrave1("test");
+//		}
+
+		try {
+			Thread.sleep(20000l);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+
 	}
 	
 
