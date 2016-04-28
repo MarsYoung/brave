@@ -29,6 +29,9 @@ public class BraveDubboClientFilter implements Filter {
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        if(invoker!=null&&invoker.getInterface().getName().equalsIgnoreCase("com.alibaba.dubbo.monitor.MonitorService")){
+            return invoker.invoke(invocation);
+        }
         ApplicationContext context= ServiceBean.getSpringContext();
         if(context==null){
             return invoker.invoke(invocation);

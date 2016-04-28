@@ -44,9 +44,4 @@ public class BraveDubboConfig {
         return new DefaultRpcServiceNameProvider(serverName);
     }
 
-    @Bean
-    @Scope(value = "singleton")
-    public ServerCreateSpanSwitch serverCreateSpanSwitch(){
-        return new DefaultRpcServerCreateSpanSwitch();
-    }
 }
