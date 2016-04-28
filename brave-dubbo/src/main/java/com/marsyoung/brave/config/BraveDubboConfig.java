@@ -1,8 +1,8 @@
 package com.marsyoung.brave.config;
 
-import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.Sampler;
-import com.github.kristofa.brave.ServerCreateSpanSwitch;
+import com.github.kristofa.brave.*;
+import com.github.kristofa.brave.http.DefaultSpanNameProvider;
+import com.github.kristofa.brave.http.SpanNameProvider;
 import com.github.kristofa.brave.scribe.ScribeSpanCollector;
 import com.marsyoung.brave.dubbo.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,10 +38,38 @@ public class BraveDubboConfig {
         return new DefaultRpcSpanNameProvider();
     }
 
+
+    /*
+    * for jersey filter
+    * */
     @Bean
     @Scope(value = "singleton")
-    public RpcServiceNameProvider rpcServiceServiceNameProvider(){
-        return new DefaultRpcServiceNameProvider(serverName);
+    public SpanNameProvider spanNameProvider() {//for jersey span
+        return new DefaultSpanNameProvider();
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public ServerRequestInterceptor serverRequestInterceptor(){
+        return brave().serverRequestInterceptor();
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public ServerResponseInterceptor serverResponseInterceptor(){
+        return brave().serverResponseInterceptor();
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public ClientRequestInterceptor clientRequestInterceptor(){
+        return brave().clientRequestInterceptor();
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public ClientResponseInterceptor clientResponseInterceptor(){
+        return brave().clientResponseInterceptor();
     }
 
 }
