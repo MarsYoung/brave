@@ -54,8 +54,8 @@ public class RpcClientRequestAdapter implements ClientRequestAdapter {
         //TODO 优化显示信息
         String serviceName=invoker.getInterface().getName();
         String methodName=invocation.getMethodName();
-        KeyValueAnnotation serviceNameAnnotation = KeyValueAnnotation.create("rpc.serviceName", serviceName);
-        KeyValueAnnotation methodNameAnnotation = KeyValueAnnotation.create("rpc.methodName", methodName);
+        KeyValueAnnotation serviceNameAnnotation = KeyValueAnnotation.create("rpc.client.serviceName", serviceName);
+        KeyValueAnnotation methodNameAnnotation = KeyValueAnnotation.create("rpc.client.methodName", methodName);
         return Arrays.asList(serviceNameAnnotation,methodNameAnnotation);
     }
 }

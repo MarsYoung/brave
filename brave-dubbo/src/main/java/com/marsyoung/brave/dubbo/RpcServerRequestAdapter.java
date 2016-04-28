@@ -5,6 +5,7 @@ import com.alibaba.dubbo.rpc.RpcInvocation;
 import com.github.kristofa.brave.*;
 import com.marsyoung.brave.constants.DubboAttachments;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -52,7 +53,12 @@ public class RpcServerRequestAdapter implements ServerRequestAdapter {
 
     @Override
     public Collection<KeyValueAnnotation> requestAnnotations() {
-        return Collections.emptyList();
+        //TODO 如果client没有监控，那么这个地方也是需要生成这些东西的（源代码这里是个empty）
+        String serviceName=invoker.getInterface().getName();
+        String methodName=invocation.getMethodName();
+        KeyValueAnnotation serviceNameAnnotation = KeyValueAnnotation.create("rpc.client.serviceName", serviceName);
+        KeyValueAnnotation methodNameAnnotation = KeyValueAnnotation.create("rpc.client.methodName", methodName);
+        return Arrays.asList(serviceNameAnnotation,methodNameAnnotation);
     }
     private SpanId getSpanId(String traceId, String spanId, String parentSpanId) {
         if (parentSpanId != null)
