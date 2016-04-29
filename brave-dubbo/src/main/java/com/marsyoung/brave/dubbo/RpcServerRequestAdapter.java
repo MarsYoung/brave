@@ -48,7 +48,7 @@ public class RpcServerRequestAdapter implements ServerRequestAdapter {
 
     @Override
     public String getSpanName() {
-        return rpcSpanNameProvider.spanName(invoker,invocation);
+        return rpcSpanNameProvider.spanName(invoker,invocation,2);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class RpcServerRequestAdapter implements ServerRequestAdapter {
         //TODO 如果client没有监控，那么这个地方也是需要生成这些东西的（源代码这里是个empty）
         String serviceName=invoker.getInterface().getName();
         String methodName=invocation.getMethodName();
-        KeyValueAnnotation serviceNameAnnotation = KeyValueAnnotation.create("rpc.client.serviceName", serviceName);
-        KeyValueAnnotation methodNameAnnotation = KeyValueAnnotation.create("rpc.client.methodName", methodName);
+        KeyValueAnnotation serviceNameAnnotation = KeyValueAnnotation.create("rpc.provider.serviceName[sr]", serviceName);
+        KeyValueAnnotation methodNameAnnotation = KeyValueAnnotation.create("rpc.provider.methodName[sr]", methodName);
         return Arrays.asList(serviceNameAnnotation,methodNameAnnotation);
     }
     private SpanId getSpanId(String traceId, String spanId, String parentSpanId) {
