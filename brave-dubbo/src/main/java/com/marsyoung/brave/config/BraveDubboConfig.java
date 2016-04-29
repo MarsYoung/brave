@@ -3,6 +3,7 @@ package com.marsyoung.brave.config;
 import com.github.kristofa.brave.*;
 import com.github.kristofa.brave.http.DefaultSpanNameProvider;
 import com.github.kristofa.brave.http.SpanNameProvider;
+import com.github.kristofa.brave.mysql.MySQLStatementInterceptorManagementBean;
 import com.github.kristofa.brave.scribe.ScribeSpanCollector;
 import com.marsyoung.brave.dubbo.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,7 @@ public class BraveDubboConfig {
 
     /*
     * for jersey filter
+    * inject interceptor bean from brave builder
     * */
     @Bean
     @Scope(value = "singleton")
@@ -72,4 +74,17 @@ public class BraveDubboConfig {
         return brave().clientResponseInterceptor();
     }
 
+
+
+    /*
+    * *for mysql
+    *
+    * add brave client tracer to mysql manage bean
+    * */
+
+    @Bean
+    @Scope(value = "singleton")
+    public MySQLStatementInterceptorManagementBean mySQLStatementInterceptorManagementBean(){
+        return new MySQLStatementInterceptorManagementBean(brave().clientTracer());
+    }
 }
