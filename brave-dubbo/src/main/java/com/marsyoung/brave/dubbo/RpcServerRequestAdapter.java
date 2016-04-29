@@ -16,13 +16,11 @@ public class RpcServerRequestAdapter implements ServerRequestAdapter {
 
     private final Invoker invoker;
     private final RpcInvocation invocation;
-    private final RpcServiceNameProvider rpcServiceNameProvider;
     private final RpcSpanNameProvider rpcSpanNameProvider;
 
-    public RpcServerRequestAdapter(Invoker invoker, RpcInvocation invocation, RpcServiceNameProvider rpcServiceNameProvider, RpcSpanNameProvider rpcSpanNameProvider) {
+    public RpcServerRequestAdapter(Invoker invoker, RpcInvocation invocation, RpcSpanNameProvider rpcSpanNameProvider) {
         this.invoker = invoker;
         this.invocation = invocation;
-        this.rpcServiceNameProvider = rpcServiceNameProvider;
         this.rpcSpanNameProvider = rpcSpanNameProvider;
     }
 

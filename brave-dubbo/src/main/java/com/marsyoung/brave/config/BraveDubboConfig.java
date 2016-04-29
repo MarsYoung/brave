@@ -76,9 +76,9 @@ public class BraveDubboConfig {
 
 
 
+
     /*
-    * *for mysql
-    *
+        for mysql
     * add brave client tracer to mysql manage bean
     * */
 
