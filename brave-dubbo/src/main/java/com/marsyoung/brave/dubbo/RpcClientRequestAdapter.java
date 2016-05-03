@@ -32,7 +32,7 @@ public class RpcClientRequestAdapter implements ClientRequestAdapter {
 
     @Override
     public String getSpanName() {
-        return rpcSpanNameProvider.spanName(invoker,invocation);
+        return rpcSpanNameProvider.spanName(invoker,invocation,1);
     }
 
     @Override
@@ -54,8 +54,7 @@ public class RpcClientRequestAdapter implements ClientRequestAdapter {
         //TODO 优化显示信息
         String serviceName=invoker.getInterface().getName();
         String methodName=invocation.getMethodName();
-        KeyValueAnnotation serviceNameAnnotation = KeyValueAnnotation.create("rpc.serviceName", serviceName);
-        KeyValueAnnotation methodNameAnnotation = KeyValueAnnotation.create("rpc.methodName", methodName);
-        return Arrays.asList(serviceNameAnnotation,methodNameAnnotation);
+        KeyValueAnnotation url = KeyValueAnnotation.create("rpc.consumer.url[cs]", invoker.getUrl()!=null?invoker.getUrl().toString():"");
+        return Arrays.asList(url);
     }
 }

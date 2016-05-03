@@ -26,10 +26,10 @@ public class RpcServerResponseAdapter implements ServerResponseAdapter{
     @Override
     public Collection<KeyValueAnnotation> responseAnnotations() {
         if(result!=null&&result.hasException()){
-            KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.response", result.getException().getMessage());
+            KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.provider.response.exception[ss]",result.getException().getMessage()==null? "":result.getException().getMessage());
             return Arrays.asList(statusAnnotation);
         }else{
-            KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.response", result.getValue().toString());
+            KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.provider.response.result[ss]", result.getValue()==null?"":result.getValue().toString());
             return Arrays.asList(statusAnnotation);
         }
     }

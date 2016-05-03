@@ -9,9 +9,8 @@ import com.alibaba.dubbo.rpc.Invoker;
 public class DefaultRpcSpanNameProvider implements  RpcSpanNameProvider {
 
 
-
     @Override
-    public String spanName(Invoker invoker, Invocation invocation) {
-        return invoker.getInterface().getName()+"."+invocation.getMethodName();
+    public String spanName(Invoker invoker, Invocation invocation, int whereCreate) {
+       return  invoker.getInterface().getName()+":"+invocation.getMethodName()+"["+(whereCreate==1?"cg":"sg")+"]";
     }
 }

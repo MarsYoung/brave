@@ -27,13 +27,14 @@ public class RpcClientResponseAdapter implements ClientResponseAdapter{
 
     @Override
     public Collection<KeyValueAnnotation> responseAnnotations() {
-        if(result!=null&&result.hasException()){
-            KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.response", result.getException().getMessage());
-            return Arrays.asList(statusAnnotation);
-        }else{
-            KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.response", result.getValue().toString());
-            return Arrays.asList(statusAnnotation);
+        if(result!=null) {
+            if (result.hasException()) {
+                KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.consumer.response.status[cr]","error");
+                return Arrays.asList(statusAnnotation);
+            }
         }
+        KeyValueAnnotation statusAnnotation = KeyValueAnnotation.create("rpc.consumer.response.status[cr]", "success");
+        return Arrays.asList(statusAnnotation);
 
     }
 }

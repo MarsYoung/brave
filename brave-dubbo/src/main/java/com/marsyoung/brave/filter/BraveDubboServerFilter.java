@@ -20,7 +20,6 @@ import org.springframework.context.ApplicationContext;
 @Activate(group = Constants.PROVIDER)
 public class BraveDubboServerFilter implements Filter {
 
-    private RpcServiceNameProvider rpcServiceNameProvider;
     private RpcSpanNameProvider rpcSpanNameProvider;
 
     private ServerRequestInterceptor requestInterceptor;
@@ -31,13 +30,12 @@ public class BraveDubboServerFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         ApplicationContext context=ServiceBean.getSpringContext();
-        rpcServiceNameProvider = context.getBean(RpcServiceNameProvider.class);
         rpcSpanNameProvider = context.getBean(RpcSpanNameProvider.class);
 
         requestInterceptor = context.getBean(Brave.class).serverRequestInterceptor();
         responseInterceptor = context.getBean(Brave.class).serverResponseInterceptor();
         //handle
-        requestInterceptor.handle(new RpcServerRequestAdapter(invoker,(RpcInvocation) invocation,rpcServiceNameProvider,rpcSpanNameProvider));
+        requestInterceptor.handle(new RpcServerRequestAdapter(invoker,(RpcInvocation) invocation,rpcSpanNameProvider));
         Result result= invoker.invoke(invocation);
         responseInterceptor.handle(new RpcServerResponseAdapter(invoker,(RpcInvocation)invocation,result));
         return result;

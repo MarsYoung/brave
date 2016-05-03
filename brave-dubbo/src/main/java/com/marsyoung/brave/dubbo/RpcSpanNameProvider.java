@@ -8,5 +8,11 @@ import com.alibaba.dubbo.rpc.Invoker;
  */
 public interface RpcSpanNameProvider {
 
-    String spanName(Invoker invoker, Invocation invocation);
+
+    /*
+    *  whereCreate 1: client generate 2: server generate
+    * */
+    String spanName(Invoker invoker, Invocation invocation,int whereCreate);
+
+
 }

@@ -60,6 +60,16 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.21</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.kristofa</groupId>
+            <artifactId>brave-http</artifactId>
+            <version>3.5.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.kristofa</groupId>
+            <artifactId>brave-mysql</artifactId>
+            <version>3.5.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
     <build>
