@@ -1,0 +1,6 @@
+target/
+logs/
+uc-passport.properties
+uc-passport.properties.lock
+target
+

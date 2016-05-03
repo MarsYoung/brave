@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.github.kristofa</groupId>
+    <artifactId>brave</artifactId>
+    <version>3.5.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>brave-apache-http-interceptors</artifactId>
+  <name>brave-apache-http-interceptors</name>
+  <description>
+    Apache http client request and response interceptor implementations.
+  </description>
+  <url>https://github.com/kristofa/brave</url>
+  <licenses>
+    <license>
+        <name>Apache 2</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>repo</distribution>
+    </license>
+   </licenses>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.github.kristofa</groupId>
+        <artifactId>brave-http</artifactId>
+        <version>3.5.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.github.kristofa</groupId>
+        <artifactId>mock-http-server</artifactId>
+        <version>4.0</version>
+        <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
